@@ -7,4 +7,5 @@
 # Node 
 /node_modules
 
-ve
+# Build files
+/build
