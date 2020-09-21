@@ -1,0 +1,10 @@
+# MAC_OS Filesys
+.DS_Store
+
+# Virtual envs
+.env
+
+# Node 
+/node_modules
+
+ve
