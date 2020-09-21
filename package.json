@@ -20,7 +20,6 @@
     "express": "^4.17.1",
     "express-handlebars": "^5.1.0",
     "mongoose": "^5.10.6",
-    "mssql": "^6.2.2",
     "mysql": "^2.18.1",
     "webpack": "^4.44.2",
     "webpack-node-externals": "^2.5.2"
