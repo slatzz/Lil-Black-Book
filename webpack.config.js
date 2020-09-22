@@ -1,4 +1,9 @@
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 const path = require('path')
+const htmlPlugin = new HtmlWebPackPlugin({
+  template: '.src/index.html',
+  filename: './index.html'
+})
 const nodeExternals = require('webpack-node-externals');
 
 const config = {

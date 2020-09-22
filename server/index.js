@@ -25,13 +25,6 @@ const connection = mysql.createConnection({
     database: DATABASE
 });
 
-// connection.connect( err => {
-//     if(err){
-//         console.log(err, 'Cannot find your spooky boys!')
-//     } else {
-//         console.log('Happy Ghost Hunting!')
-//     }
-// })
 const mockResponse = {
     'name': 'Spooky Boys', 
     'specialty':'Poltergeists'
@@ -45,8 +38,12 @@ connection.connect( err => {
     }
 })
 ////////////////////////////////////////////////
+app.get('/api', (req, res) => {
+    res.send(mockResponse);
+})
+
 app.get('/', (req, res) => {
-    res.status(200).send(mockResponse);
+    res.status(200).send('Hello World!');
 })
 
 app.post('/', (req, res) => {
