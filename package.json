@@ -4,7 +4,7 @@
   "description": "A really spooky project",
   "main": "src/index.js",
   "scripts": {
-    "start": "nodemon src/index.js",
+    "start": "nodemon server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack"
   },
@@ -21,6 +21,8 @@
     "express-handlebars": "^5.1.0",
     "mongoose": "^5.10.6",
     "mysql": "^2.18.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "webpack": "^4.44.2",
     "webpack-node-externals": "^2.5.2"
   },
