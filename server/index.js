@@ -12,9 +12,9 @@ const { PORT } = process.env;
 const DIR = path.join(__dirname, '../build');
 const HTML_FILE = path.join(DIR, 'index.html');
 app.use(express.static(DIR));
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.urlencoded({extended:true}));
-// app.use(bodyParser.json());
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 
 
 // -------- TEST --------- //
@@ -34,15 +34,28 @@ const Query = sequelize.define('Query', {
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////// CRUD //////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
+app.get('/', (req, res) => {
+    res.sendFile(HTML_FILE);
+})
+
 app.get('/query', (req, res) => {
-    Query.create({ value: 'CHROMATICA'})
+    Query.findAll()
         .then( (query) => {
-            res.send(JSON.stringify(query.value))
+            res.status(200).send(query)
+        })
+        .catch( err => {
+            res.status(500).send(err);
         })
 })
 
-app.get('/', (req, res) => {
-    res.sendFile(HTML_FILE);
+app.post('/query', (req, res) => {
+    Query.create({ value : 'Hello hello hello'})
+    .then( (query) => {
+        res.status(200).send(JSON.stringify(query.value))
+    })
+    .catch( err => {
+        res.status(500).send(err);
+    })
 })
 
 app.post('/', (req, res) => {
