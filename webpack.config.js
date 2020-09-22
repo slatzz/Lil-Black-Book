@@ -22,15 +22,10 @@ const config = {
   },
   module: {
     rules: [
-      // { test: /\.html$/, 
-      // exclude: [/node_modules/, require.resolve('./src/index.html')],
-      // use: {
-      //     loader: 'file-loader',
-      //     query: {
-      //         name: '[name].[ext]'
-      //     },
-      // },
-      // }, 
+      {
+        test: /\.s?css$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      },
       { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
     ]
   }
