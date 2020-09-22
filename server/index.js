@@ -1,20 +1,15 @@
-// import ReactDOM from 'react-dom';
-
 require ('dotenv').config();
 const express = require('express');
+const path = require('path'); 
 const app = express();
-const bodyparser = require('body-parser');
 const mysql = require('mysql');
 const { PORT } = process.env;
-// const React = require('./components/App.js')
-// const index = require('index.html');
-const bodyParser = require('body-parser');
-
-app.use(express.static('root'));
-app.use(bodyparser.urlencoded({extended:true}));
-app.use(bodyParser.json());
-// app.engine('html', require('ejs').renderFile);
-// app.set('view engine', 'html');
+const DIR = path.join(__dirname, '../build');
+const HTML_FILE = path.join(DIR, 'index.html');
+// const bodyParser = require('body-parser');
+// app.use(bodyParser.urlencoded({extended:true}));
+// app.use(bodyParser.json());
+app.use(express.static(DIR));
 
 ////// MYSQL DATABASE CONNECTION //////
 const DATABASE = 'spooky';
@@ -43,12 +38,12 @@ app.get('/api', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    res.status(200).send('Hello World!');
+    res.sendFile(HTML_FILE);
 })
 
-app.post('/', (req, res) => {
-    res.status(201).send({"name": "Ghost Bros", "specialty": "Daemons"});
-})
+// app.post('/', (req, res) => {
+//     res.status(201).send({"name": "Ghost Bros", "specialty": "Daemons"});
+// })
 
 app.listen(PORT, () => {
 	console.info(`Dis _ooSPOOKYoo_ app is listening on ${PORT}`)
