@@ -8,8 +8,7 @@ const DB_PASS = '';
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
     host: 'localhost',
-    dialect: 'mysql',
-    timestamps: false
+    dialect: 'mysql'
   });
 
 sequelize.authenticate()

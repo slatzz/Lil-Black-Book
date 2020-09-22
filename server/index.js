@@ -26,18 +26,18 @@ const mockResponse = {
 const Query = sequelize.define('Query', {
     id: { 
         type: Sequelize.NUMBER, 
-        primaryKey: true,
-        auto_increment: true
+        auto_increment: true,
+        primaryKey: true
     },
     value: Sequelize.STRING,
 }, { timestamps: false })
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////// CRUD //////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-app.get('/api', (req, res) => {
-    Query.create({ value: 'Pop a 911'})
+app.get('/query', (req, res) => {
+    Query.create({ value: 'CHROMATICA'})
         .then( (query) => {
-            console.log(JSON.stringify(query))
+            res.send(JSON.stringify(query.value))
         })
 })
 
