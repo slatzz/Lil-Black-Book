@@ -1,16 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles.scss'
-// const Index = () => {
-//     return <div>Hello from React file</div>;
-// };
+import Layout from './components/layout.js'
+// import Zipcode from './components/zipcodes.js'
+// import Favorites from './components/favorites.js'
 
-class Index extends React.Component {
-    constructor(props){
-        super(props)
-    }
-    render(){
-        return <div>Hello from React file</div>
-    }
-}
-ReactDOM.render(<Index />, document.getElementById('root'));
+import './styles.scss'
+
+
+
+const renderMe = document.getElementById('root');
+ReactDOM.render(<Layout />, renderMe);
