@@ -9,6 +9,7 @@ const path = require('path');
 const { Sequelize } = require('sequelize');
 const app = express();
 const { PORT, API_KEY } = process.env;
+const api = 'https://api.yelp.com/v3/businesses/search';
 const DIR = path.join(__dirname, '../build');
 const HTML_FILE = path.join(DIR, 'index.html');
 app.use(express.static(DIR));
@@ -25,25 +26,43 @@ app.get('/', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// READ //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-app.get('/', (req, res) => {
-    const { zipcode } = req.body;
-    console.log(zipcode);
-    Query.findAll( {zipcode})
-        .then( (query) => {
-            res.status(200).send(query)
+
+// Look for the queried word
+app.get('/dictionary', (req, res) => {
+    Query.findAll({})
+      .then(word => {
+        res.status(200).send(word);
+      })
+      .catch(err => { res.status(500).send('Could not find word')})
+  });
+
+// // 
+app.post('/dictionary', (req, res) => {
+    const {word} = req.body;
+    Query.findAll({ word: req.body.word })
+        .then(results => {
+            if(!results){
+                new Query({word}).save()
+                console.log('Yes added new word hello')
+                .then( newword => {
+                    res.status(200).send(newword);
+                    return;
+                })
+            } else {
+                console.log('word already in database')
+                res.status(200).send(word)
+            }
         })
-        .catch( err => {
-            res.status(500).send(err);
-        })
-})
+        .catch( err => { console.log('Errraaaa', err)})
+    })
 ////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// CREATE /////////////////////////////////////////
+//////////////////////////////////// CREATE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-app.post('/', (req, res) => {
-    const { zipcode } = req.body;
-    Query.create({zipcode})
-    .then( (query) => {
-        res.status(200).send('hello')
+app.post('/dictionary', (req, res) => {
+    const { word } = req.body;
+    Query.create({word})
+    .then( (word) => {
+        res.status(200).send(word)
     })
     .catch( err => {
         res.status(500).send(err);
@@ -56,7 +75,7 @@ app.put('/query', (req, res) => {
     
 })
 ////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// DELETE /////////////////////////////////////////
+//////////////////////////////////// DELETE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
 // app.post('/', (req, res) => {

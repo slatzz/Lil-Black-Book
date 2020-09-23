@@ -22,7 +22,7 @@ const Query = sequelize.define('Query', {
       auto_increment: true,
       primaryKey: true
   },
-  zipcode: {
+  city: {
     type: Sequelize.NUMBER
   },
 }, { timestamps: false })
@@ -36,7 +36,7 @@ const Favorites = sequelize.define('Favorites', {
   business: {
     type: Sequelize.STRING
   },
-  zipcode: {
+  city: {
     type: Sequelize.NUMBER
   }
 }, {timestamps: false})

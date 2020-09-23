@@ -1,1 +1,1 @@
-GET http://localhost:8080/query
+POST http://localhost:8080/spooky
