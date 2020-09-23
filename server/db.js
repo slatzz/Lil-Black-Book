@@ -4,7 +4,7 @@ const mysql = require('mysql');
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////// SET UP DATABASE //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-const DB_NAME = 'spooky';
+const DB_NAME = 'dictionary';
 const DB_USER = 'root';
 const DB_PASS = '';
 
@@ -16,28 +16,34 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////QUERY/FAVORITES - MODELS ///////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-const Query = sequelize.define('Query', {
+const Queries = sequelize.define('Queries', {
   id: { 
-      type: Sequelize.NUMBER, 
-      auto_increment: true,
+      type: Sequelize.INTEGER, 
+      autoIncrement: true,
       primaryKey: true
   },
-  city: {
-    type: Sequelize.NUMBER
+  word: {
+    type: Sequelize.STRING
   },
+  definition: {
+    type: Sequelize.STRING,
+  }, 
+  rating: {
+    type: Sequelize.STRING
+  }
 }, { timestamps: false })
 
 const Favorites = sequelize.define('Favorites', {
   id:{
-      type: Sequelize.NUMBER,
+      type: Sequelize.INTEGER,
       auto_increment: true,
       primaryKey: true
   },
-  business: {
+  word: {
     type: Sequelize.STRING
   },
-  city: {
-    type: Sequelize.NUMBER
+  definition: {
+    type: Sequelize.STRING
   }
 }, {timestamps: false})
 
@@ -47,9 +53,9 @@ const Favorites = sequelize.define('Favorites', {
 
 sequelize.authenticate()
   .then( () => {
-      console.log('Happy Ghost Hunting!')
+      console.log('Dictionary database ready!!!')
   })
   .catch( err => {
-    console.log(err, 'Cannot find your spooky boys!')
+    console.log(err, 'Cannot find your lil words :<!')
   })
-module.exports = { sequelize, Query, Favorites };
+module.exports = { sequelize, Queries, Favorites };

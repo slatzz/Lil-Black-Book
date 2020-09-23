@@ -3,19 +3,19 @@
 ///////////////////////////////////// SET UP ///////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 require ('dotenv').config();
-const { sequelize, Query, Favorites }  = require('./db')
+const { sequelize, Queries, Favorites }  = require('./db')
 const express = require('express');
 const path = require('path'); 
 const { Sequelize } = require('sequelize');
 const app = express();
 const { PORT, API_KEY } = process.env;
-const api = 'https://api.yelp.com/v3/businesses/search';
+// const api = 'https://api.yelp.com/v3/businesses/search';
 const DIR = path.join(__dirname, '../build');
 const HTML_FILE = path.join(DIR, 'index.html');
 app.use(express.static(DIR));
 const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended:true}));
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////// CRUD ////////////////////////////////////////
@@ -27,26 +27,29 @@ app.get('/', (req, res) => {
 //////////////////////////////////// READ //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-// Look for the queried word
-app.get('/dictionary', (req, res) => {
-    Query.findAll({})
-      .then(word => {
-        res.status(200).send(word);
-      })
-      .catch(err => { res.status(500).send('Could not find word')})
-  });
-
-// // 
+// app.post('/dictionary', (req, res) => {
+//     const { word } = req.body;
+//     Queries.create( { word })
+//         .then(word => {
+//             console.log("Word added to DB!")
+//             res.status(201).send(word)
+//         })
+//         .catch( err => {
+//             console.log('not saving word')
+//             res.status(500).send(err)
+//         })
+// })
 app.post('/dictionary', (req, res) => {
-    const {word} = req.body;
-    Query.findAll({ word: req.body.word })
+    // const {word} = req.body;
+    // console.log(req.body.word);
+    Queries.findAll({ word: req.body.word })
         .then(results => {
-            if(!results){
-                new Query({word}).save()
+            if(!results.length){
+                new Queries(req.body).save()
                 console.log('Yes added new word hello')
-                .then( newword => {
-                    res.status(200).send(newword);
-                    return;
+                .then( newWord => {
+                    res.status(200)
+                    res.send(newWord);
                 })
             } else {
                 console.log('word already in database')
@@ -55,23 +58,34 @@ app.post('/dictionary', (req, res) => {
         })
         .catch( err => { console.log('Errraaaa', err)})
     })
+// Look for the queried word
+app.get('/dictionary', (req, res) => {
+    Queries.findAll({})
+      .then(word => {
+        console.log('Found word!')
+        res.status(200).send(word);
+      })
+      .catch(err => { res.status(500).send('Could not find word')})
+  });
+
+// // 
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// CREATE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-app.post('/dictionary', (req, res) => {
-    const { word } = req.body;
-    Query.create({word})
-    .then( (word) => {
-        res.status(200).send(word)
-    })
-    .catch( err => {
-        res.status(500).send(err);
-    })
-})
+// app.post('/dictionary', (req, res) => {
+//     const { word } = req.body;
+//     Queries.create({word})
+//     .then( (word) => {
+//         res.status(200).send(word)
+//     })
+//     .catch( err => {
+//         res.status(500).send(err);
+//     })
+// })
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// UPDATE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-app.put('/query', (req, res) => {
+app.put('/dictionary', (req, res) => {
     
 })
 ////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +101,7 @@ app.put('/query', (req, res) => {
 //////////////////////////////////// PORT //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 app.listen(PORT, () => {
-	console.info(`Dis _ooSPOOKYoo_ app is listening on ${PORT}`)
+	console.info(`Da LIL BLACK BOOK is listening on ${PORT}`)
 })
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////CODE ENDS HERE /////////////////////////////////////
