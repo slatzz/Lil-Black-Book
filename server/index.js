@@ -26,7 +26,17 @@ app.get('/', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// READ //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-
+app.get('/dictionary', (req, res) => {
+    Queries.findAll({})
+      .then(word => {
+        console.log('Found word!')
+        res.status(200).send(word);
+      })
+      .catch(err => { res.status(500).send('Could not find word')})
+  });
+////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// CREATE ////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 app.post('/dictionary', (req, res) => {
     const { word } = req.body;
     Queries.create( { word })
@@ -39,63 +49,40 @@ app.post('/dictionary', (req, res) => {
             res.status(500).send(err)
         })
 })
-// app.post('/dictionary', (req, res) => {
-//     // const {word} = req.body;
-//     Queries.findAll({ word: req.body.word })
-//     .then(results => {
-//         if(!results.length){
-//             new Queries(req.body).save()
-//             console.log('Yes added new word hello')
-//             .then( newWord => {
-//                 res.status(200)
-//                 res.send(newWord);
-//             })
-//         } else {
-//             console.log('req body??????', req.body);
-//                 console.log('word already in database')
-//                 res.status(200).send(results)
-//             }
-//         })
-//         .catch( err => { console.log('Errraaaa', err)})
-//     })
-// Look for the queried word
-app.get('/dictionary', (req, res) => {
-    Queries.findAll({})
-      .then(word => {
-        console.log('Found word!')
-        res.status(200).send(word);
-      })
-      .catch(err => { res.status(500).send('Could not find word')})
-  });
-
-// // 
-////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////// CREATE ////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-// app.post('/dictionary', (req, res) => {
-//     const { word } = req.body;
-//     Queries.create({word})
-//     .then( (word) => {
-//         res.status(200).send(word)
-//     })
-//     .catch( err => {
-//         res.status(500).send(err);
-//     })
-// })
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// UPDATE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 app.put('/dictionary', (req, res) => {
-    
-})
+    let { vote } = req.body;
+    Queries.update({ rating: vote},)
+    .then(query => {
+      if(query){
+        query.update(rating)
+          .then( () => {
+            res.sendStatus(200)
+          })
+        }
+    })
+    .catch( err => {
+        res.status(500).send(err)
+    })
+  })
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DELETE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-
-// app.post('/', (req, res) => {
-//     res.status(201)
-//     res.send({"name": "Ghost Bros", "specialty": "Daemons"});
-// })
+app.delete('/dictionary', (req, res) => {
+    const { id } = req.params;
+    Queries.findById(id)
+        .then(query => {
+            if(query){
+                query.destroy()
+                    .then( () => {
+                        res.sendStatus(200)
+                    })
+                    .catch(err => res.status(500))
+            }
+        })
+})
 
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// PORT //////////////////////////////////////////

@@ -22,6 +22,7 @@ export default class Layout extends React.Component {
         this.searchUrban = this.searchUrban.bind(this);
         this.searchWerd = this.searchWerd.bind(this);
         this.favoriteAWord = this.favoriteAWord.bind(this);
+        this.toggleLike = this.toggleLike.bind(this);
         // this.onSubmit = this.onSubmit.bind(this)
     }
 
@@ -75,7 +76,6 @@ export default class Layout extends React.Component {
                 axios.get('http://localhost:8080/dictionary')
                     .then( (results) => {
                         if(favorites.length === 0){
-                            // console.log('qqqqq', query)
                             this.setState({
                                 favorites: [query],
                                 werdData: results.data
@@ -90,16 +90,28 @@ export default class Layout extends React.Component {
                                 console.log('ALREADY FAVORITED')
                             }
                         }
-                        // console.log('favvesss', favorites)
-                        // console.log('werddataaa', werdData)
                     })
             })
             .catch( err => { console.log('something went wrong', err)})
         }
 
+    toggleLike(likesCount, vote){ // likesCt how many ppl have up or downvoted, vote is incrementer of either 1 or -1
+        const options = {
+            thumbs: likesCount, 
+            increment: vote
+        }
+        axios.put('http://localhost:8080/dictionary', options)
+            .then(() => {
+                axios.get('http://localhost:8080/dictionary')
+                    .then((result) => {
+                        this.setState({ werdData: result.data })
+                    })
+                })
+            }
+
     render(){
        let { favorites, query } = this.state;
-       console.log('-------->', query);
+    //    console.log('-------->', query);
        if(Object.keys(query).length ){
            return (
                <div>
@@ -110,7 +122,7 @@ export default class Layout extends React.Component {
                    <div><Search searchUrban={this.searchUrban} searchWerd={this.searchWerd} /></div>
                    <br></br>
                    <div><QueryList entry={query} favoriteAWord={this.favoriteAWord}/></div>
-                   <div><FaveList faves={favorites}/></div>
+                   <div><FaveList faves={favorites} toggleLike={this.toggleLike}/></div>
                    {/* <div><FaveListEntry entry={query}/></div> */}
                </div>
            )
@@ -126,7 +138,7 @@ export default class Layout extends React.Component {
                 <br></br>
                 <div><QueryList entry={query} favoriteAWord={this.favoriteAWord}/></div>
                 <div><FaveList faves={favorites}/></div>
-                <div><FaveListEntry entry={query}/></div>
+                <div><FaveListEntry entry={query} toggleLike={this.toggleLike}/></div>
             </div>
         )
        } 
