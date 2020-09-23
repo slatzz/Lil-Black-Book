@@ -27,37 +27,37 @@ app.get('/', (req, res) => {
 //////////////////////////////////// READ //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-// app.post('/dictionary', (req, res) => {
-//     const { word } = req.body;
-//     Queries.create( { word })
-//         .then(word => {
-//             console.log("Word added to DB!")
-//             res.status(201).send(word)
-//         })
-//         .catch( err => {
-//             console.log('not saving word')
-//             res.status(500).send(err)
-//         })
-// })
 app.post('/dictionary', (req, res) => {
-    // const {word} = req.body;
-    // console.log(req.body.word);
-    Queries.findAll({ word: req.body.word })
-        .then(results => {
-            if(!results.length){
-                new Queries(req.body).save()
-                console.log('Yes added new word hello')
-                .then( newWord => {
-                    res.status(200)
-                    res.send(newWord);
-                })
-            } else {
-                console.log('word already in database')
-                res.status(200).send(word)
-            }
+    const { word } = req.body;
+    Queries.create( { word })
+        .then(word => {
+            console.log("Word added to DB!")
+            res.status(201).send(word)
         })
-        .catch( err => { console.log('Errraaaa', err)})
-    })
+        .catch( err => {
+            console.log('not saving word')
+            res.status(500).send(err)
+        })
+})
+// app.post('/dictionary', (req, res) => {
+//     // const {word} = req.body;
+//     Queries.findAll({ word: req.body.word })
+//     .then(results => {
+//         if(!results.length){
+//             new Queries(req.body).save()
+//             console.log('Yes added new word hello')
+//             .then( newWord => {
+//                 res.status(200)
+//                 res.send(newWord);
+//             })
+//         } else {
+//             console.log('req body??????', req.body);
+//                 console.log('word already in database')
+//                 res.status(200).send(results)
+//             }
+//         })
+//         .catch( err => { console.log('Errraaaa', err)})
+//     })
 // Look for the queried word
 app.get('/dictionary', (req, res) => {
     Queries.findAll({})

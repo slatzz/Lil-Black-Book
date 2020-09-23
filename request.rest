@@ -1,1 +1,1 @@
-GET http://localhost:8080/dictionary
+POST http://localhost:8080/dictionary

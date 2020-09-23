@@ -2,12 +2,13 @@ import React from 'react'
 
 const QueryList = (props) => (
     <div className='queried-word'>
-        <span className='queried-word'> Werddd: {props.entry.word}</span>
-        <span className='queried-word-definition'>Definition: {props.entry.definition}</span>
-        <span className='queried-word-example'>Example: {props.entry.example}</span>
-        <span className='queried-word-thumbs-up'>Likes: {props.entry.thumbs_up}</span>
-        <span className='queried-word-thumbs-down'>Dislikes: {props.entry.thumbs_down}</span>
-            <button onClick={ () => props.favoriteAWord()}>Favorite A Word</button>
+        <span className='queried-word'><b>Werddd:   </b>{props.entry.word}</span><br></br>
+        <span className='queried-word-definition'><b>Definition:   </b>{props.entry.definition}</span><br></br>
+        <span className='queried-word-example'><b>Example:   </b>{props.entry.example}</span><br></br>
+        <span className='queried-word-thumbs-up'><b>Likes:   </b>{props.entry.thumbs_up}</span><br></br>
+        <span className='queried-word-thumbs-down'><b>Dislikes:   </b>{props.entry.thumbs_down}</span>
+            <br></br><br></br>
+            <button onClick={ () => props.favoriteAWord()}>Add to Word Bank</button>
     </div>
 
 )

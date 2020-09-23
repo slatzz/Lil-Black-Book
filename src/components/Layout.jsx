@@ -47,10 +47,12 @@ export default class Layout extends React.Component {
             }
             })
             .then(({data})=>{
-              console.log(data.list[0])
-              this.setState = {
+                // console.log('DATAAAAAA', data);
+            // console.log(typeof data.list[0]) // object
+            //   console.log(data.list[0])
+              this.setState({
                   query: data.list[0]
-              }
+              })
             })
             .catch((error)=>{
               console.log(error)
@@ -65,17 +67,31 @@ export default class Layout extends React.Component {
     }
 
     favoriteAWord(){
-        let { query } = this.state;
+        event.preventDefault();
+        let { query, favorites, werdData } = this.state;
         axios.post('http://localhost:8080/dictionary', query)
             .then( (searchedWord) => {
                 console.log('hello from favoriteAWord')
                 axios.get('http://localhost:8080/dictionary')
                     .then( (results) => {
-                        console.log('--->', results)
-                        this.setState({
-                            werdData: results.data,
-                            query: {}
-                        })
+                        if(favorites.length === 0){
+                            // console.log('qqqqq', query)
+                            this.setState({
+                                favorites: [query],
+                                werdData: results.data
+                            })
+                        } else {
+                            if(!favorites.includes(query)){
+                                favorites.push(query)
+                                this.setState({
+                                    werdData: results.data
+                                })
+                            } else {
+                                console.log('ALREADY FAVORITED')
+                            }
+                        }
+                        // console.log('favvesss', favorites)
+                        // console.log('werddataaa', werdData)
                     })
             })
             .catch( err => { console.log('something went wrong', err)})
@@ -83,23 +99,42 @@ export default class Layout extends React.Component {
 
     render(){
        let { favorites, query } = this.state;
-       if(Object.keys(query).length){
+       console.log('-------->', query);
+       if(Object.keys(query).length ){
            return (
                <div>
-                   <h1>Lil Black Book.</h1>
-                   <h3>Look up the strange word your nephew used at Thanksgiving to describe your feet.</h3>
+                   <h1><center>Lil Black Book.</center></h1>
+                   <h3><center>Look up the strange word your nephew used at Thanksgiving to describe your feet.</center></h3>
                    <p></p>
                    <h4>Enter a word below:</h4>
                    <div><Search searchUrban={this.searchUrban} searchWerd={this.searchWerd} /></div>
-                   <div><FaveList faves={favorites}/></div>
+                   <br></br>
                    <div><QueryList entry={query} favoriteAWord={this.favoriteAWord}/></div>
+                   <div><FaveList faves={favorites}/></div>
+                   {/* <div><FaveListEntry entry={query}/></div> */}
                </div>
            )
-       } else {
+       } 
+       else if(favorites.length){
         return (
             <div>
-                <h1>Lil Black Book.</h1>
-                <h3>Look up the strange word your nephew used at Thanksgiving to describe your feet.</h3>
+                <h1><center>Lil Black Book.</center></h1>
+                <h3><center>Educate yourself before you yeet yourself.</center></h3>
+                <p></p>
+                <h4>Enter a word below:</h4>
+                <div><Search searchUrban={this.searchUrban} searchWerd={this.searchWerd} /></div>
+                <br></br>
+                <div><QueryList entry={query} favoriteAWord={this.favoriteAWord}/></div>
+                <div><FaveList faves={favorites}/></div>
+                <div><FaveListEntry entry={query}/></div>
+            </div>
+        )
+       } 
+       else { // Page display before any search or favorite
+        return (
+            <div>
+                   <h1><center>Lil Black Book.</center></h1>
+                   <h3><center>Look up the strange word your nephew used at Thanksgiving to describe your feet.</center></h3>
                 <p></p>
                 <h4>Enter a word below:</h4>
                 <div><Search searchUrban={this.searchUrban} searchWerd={this.searchWerd} entry={query}/></div>
