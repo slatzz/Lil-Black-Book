@@ -4,7 +4,8 @@ export default class Favorites extends React.Component {
   render() {
     return (
       <div className="favorite-businesses">
-        <h4>Spooky Spotlight</h4>
+        <nav><h4>Spooky Spotlight</h4></nav>
+        <h5>Top professionals rated by your neighbors!</h5>
         <ul>
           <li>Business 1</li>
           <li>Business 2</li>
@@ -28,4 +29,4 @@ export default class Favorites extends React.Component {
 
 // }
 
-window.Favorites = Favorites;
+// window.Favorites = Favorites;

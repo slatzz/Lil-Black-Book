@@ -3,18 +3,18 @@ import Zipcode from './Zipcodes'
 import Favorites from './Favorites'
 
 export default class Layout extends React.Component {
-    constructor(){
-        super()
-
-        this.name = "Spooky Is The Best App Eva"
+    constructor(props){
+        super(props)
     }
     render(){
         return (
             <div>
                 <h1>Welcome to Spooky!</h1>
-                <h3>Did you know... {this.name}</h3>
-                <div><Favorites /></div>
+                <h3>Find metaphysical and paranormal professionals in your area.</h3>
+                <p></p>
+                <h4>Enter your zipcode to search professionals:</h4>
                 <div><Zipcode /></div>
+                <div><Favorites /></div>
             </div>
         )
     }

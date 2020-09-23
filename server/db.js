@@ -1,7 +1,9 @@
 const Sequelize = require('sequelize');
 const mysql = require('mysql');
 
-////// MYSQL DATABASE CONNECTION //////
+////////////////////////////////////////////////////////////////////////////////////
+//////////////////////// SET UP DATABASE //////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
 const DB_NAME = 'spooky';
 const DB_USER = 'root';
 const DB_PASS = '';
@@ -11,6 +13,38 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
     dialect: 'mysql'
   });
 
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////QUERY/FAVORITES - MODELS ///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+const Query = sequelize.define('Query', {
+  id: { 
+      type: Sequelize.NUMBER, 
+      auto_increment: true,
+      primaryKey: true
+  },
+  zipcode: {
+    type: Sequelize.NUMBER
+  },
+}, { timestamps: false })
+
+const Favorites = sequelize.define('Favorites', {
+  id:{
+      type: Sequelize.NUMBER,
+      auto_increment: true,
+      primaryKey: true
+  },
+  business: {
+    type: Sequelize.STRING
+  },
+  zipcode: {
+    type: Sequelize.NUMBER
+  }
+}, {timestamps: false})
+
+////////////////////////////////////////////////////////////////////////////////////
+//////////////////////TEST DATABSE /////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
 sequelize.authenticate()
   .then( () => {
       console.log('Happy Ghost Hunting!')
@@ -18,21 +52,4 @@ sequelize.authenticate()
   .catch( err => {
     console.log(err, 'Cannot find your spooky boys!')
   })
-
-// const DATABASE = 'spooky';
-// const connection = mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: '',
-//     database: DATABASE
-// });
-
-// connection.connect( err => {
-//     if(err){
-//         console.log(err, 'Cannot find your spooky boys!')
-//     } else {
-//         console.log('Happy Ghost Hunting!')
-//     }
-// })
-
-module.exports = sequelize;
+module.exports = { sequelize, Query, Favorites };

@@ -9,3 +9,6 @@
 
 # Build files
 /build
+
+#API KEY
+src/config/secrets.js
