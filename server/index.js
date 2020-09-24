@@ -13,7 +13,7 @@ const { PORT, API_KEY } = process.env;
 const DIR = path.join(__dirname, '../build');
 const HTML_FILE = path.join(DIR, 'index.html');
 app.use(express.static(DIR));
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 app.use(express.json());
 // app.use(bodyParser.urlencoded({extended:true}));
 
@@ -63,18 +63,18 @@ app.put('/dictionary/:rating', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DELETE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-app.delete('/dictionary/:word', (req, res) => {
-    let { word } = req.body
-    // console.log('??', req.query)
+app.delete('/dictionary', (req, res) => {
+    let { favedWord } = req.query
+    console.log('??', req.query)
     // Queries.findAll({})
     // .then( theWord => {
         // console.log('result', result[0])
         Queries.destroy({
-        where: { word: {word}}
+        where: { word: favedWord }
         })
     // })
     .then( () => {
-        res.send(`${{word}} deleted!`)
+        res.send(`${ favedWord } deleted!`)
     })
     .catch( err => { console.log('Could not remove')})
 })

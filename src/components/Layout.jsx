@@ -22,13 +22,14 @@ export default class Layout extends React.Component {
         this.favoriteAWord = this.favoriteAWord.bind(this);
         this.toggleLike = this.toggleLike.bind(this);
         this.removeAWord = this.removeAWord.bind(this);
+        this.onSubmit = this.onSubmit.bind(this)
         // this.onSubmit = this.onSubmit.bind(this)
     }
 
     componentDidMount(){
         console.log('Page mounted!')
-        axios.get('http://localhost:8080/dictionary')
-            .then( results => this.setState({werdData: results.data})) 
+        axios.get('/dictionary')
+            .then( ({ results }) => this.setState({ werdData: results })) 
     }
 
     // Call API when word is entered
@@ -66,6 +67,12 @@ export default class Layout extends React.Component {
         this.setState({ werd: event.target.value })
     }
 
+    onSubmit(event){
+        this.setState({
+            favorites: []
+        })
+    }
+
     favoriteAWord(){
         event.preventDefault();
         let { query, favorites, werdData } = this.state;
@@ -94,23 +101,25 @@ export default class Layout extends React.Component {
             .catch( err => { console.log('something went wrong', err)})
         }
 
-    removeAWord(){
-        let { query, favorites, werdData } = this.state;
-            axios.delete('http://localhost:8080/dictionary/word')
-                .then( () => {
-                    axios.get('http://localhost:8080/dictionary')
-                    .then( result => {
-                        this.setState({ werdData: result.data})
-                        res.send('Word removed with function!')
-                    })
-                })
-                .catch( err => { console.log('item removed!')})
+    removeAWord(favedWord){
+        console.log('----->', favedWord)
+            // axios.delete(`http://localhost:8080/dictionary?favedWord=${favedWord}`)
+            //     .then( () => {
+            //         axios.get('http://localhost:8080/dictionary')
+            //         .then( result => {
+            //             this.setState({ 
+            //                 werdData: result.data,
+            //             })
+            //             res.send('Word removed with function!')
+            //         })
+            //     })
+            //     .catch( err => { console.log('item removed!')})
             }
 
     toggleLike(userRating){ // Clicking like will set rating to 1, clicking dislike will set rating to -1
         let { rating, werdData } = this.state;
         const options = {
-            rating: rating
+            rating: rating 
         }
         axios.put('http://localhost:8080/dictionary/rating', options)
             .then(() => {
@@ -138,11 +147,11 @@ export default class Layout extends React.Component {
                    <br></br>
                    <div><QueryList entry={query} favoriteAWord={this.favoriteAWord} toggleLike={this.toggleLike}/></div>
                    <div><FaveList faves={favorites}/></div>
-                   {/* <div><FaveListEntry entry={query}/></div> */}
+                   <div><FaveListEntry entry={query} removeAWord={this.removeAWord}/></div>
                </div>
            )
        } 
-       else if(favorites.length){
+       else{
         return (
             <div>
                 <h1><center>Lil Black Book.</center></h1>
@@ -153,21 +162,24 @@ export default class Layout extends React.Component {
                 <br></br>
                 <div><QueryList entry={query} favoriteAWord={this.favoriteAWord} toggleLike={this.toggleLike}/></div>
                 <div><FaveList faves={favorites}/></div>
-                <div><FaveListEntry entry={query} removeAWord={this.removeAWord}/></div>
-            </div>
+                {/* <div><FaveListEntry entry={query} onSubmit={this.onSubmit} removeAWord={this.removeAWord}/> */}
+                </div>
+                
+
+            
         )
        } 
-       else { // Page display before any search or favorite
-        return (
-            <div>
-                   <h1><center>Lil Black Book.</center></h1>
-                   <h3><center>Look up the strange word your nephew used at Thanksgiving to describe your feet.</center></h3>
-                <p></p>
-                <h4>Enter a word below:</h4>
-                <div><Search searchUrban={this.searchUrban} searchWerd={this.searchWerd} entry={query}/></div>
-                <div><FaveList faves={favorites}/></div>
-            </div>
-            )
-       }
+    //    else { // Page display before any search or favorite
+    //     return (
+    //         <div>
+    //                <h1><center>Lil Black Book.</center></h1>
+    //                <h3><center>Look up the strange word your nephew used at Thanksgiving to describe your feet.</center></h3>
+    //             <p></p>
+    //             <h4>Enter a word below:</h4>
+    //             <div><Search searchUrban={this.searchUrban} searchWerd={this.searchWerd} entry={query}/></div>
+    //             <div><FaveList faves={favorites}/></div>
+    //         </div>
+    //         )
+    //    }
     }
 }

@@ -7,7 +7,7 @@ const Favorites = (props) => (
       <h3>My Word Bank</h3>
       <div>
         
-        { props.faves.map( (faved, index) =>  <FaveListEntry entry={ faved } key={ index } /> )}</div>
+        { props.faves.map( (faved, index) =>  <FaveListEntry entry={ faved } key={ index } removeAWord={ props.removeAWord }/> )}</div>
       <br></br>
   </div>
 )
