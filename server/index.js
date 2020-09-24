@@ -53,24 +53,6 @@ app.post('/dictionary', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// UPDATE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-// app.put('/dictionary', (req, res) => {
-//     // console.log('Hello')
-//     let { word } = req.body;
-//     // console.log('put', word)
-//     Queries.update({ rating: 1})
-//     .then(query => {
-//       if(query){
-//         query.update(rating)
-//           .then( () => {
-//             res.sendStatus(200)
-//           })
-//         }
-//     })
-//     .catch( err => {
-//         res.status(500).send(err)
-//     })
-//   })
-
 app.put('/dictionary/:rating', (req, res) => {
     let { rating } = req.body
         // console.log('~~~>', result[0])
@@ -78,16 +60,6 @@ app.put('/dictionary/:rating', (req, res) => {
             .then( () => { res.send('Rating changed!')})
             .catch( err => { console.log('You have already rated this word, chillax bruhhh')})
  })
-
-// app.put('/dictionary', (req, res) => {
-//     let { rating } = req.body
-//     Queries.update({ definition: 'UPDATE' })
-//     .then(result => {
-//         console.log('*****', result[0])
-//     })
-//     .catch( err => { console.log('You have already rated this word, chillax bruhhh')})
-    
-//         })
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DELETE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////

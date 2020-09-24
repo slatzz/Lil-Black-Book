@@ -14,7 +14,7 @@ export default class Layout extends React.Component {
             query: {}, // The searched word resp obj
             favorites: [], // My favorited words
             werdData: [], // Collected word data
-            rating: 0
+            rating: null
         }
         // Bind functions to app
         this.searchUrban = this.searchUrban.bind(this);
@@ -95,30 +95,34 @@ export default class Layout extends React.Component {
         }
 
     removeAWord(){
-            event.preventDefault();
-            let { query, favorites, werdData } = this.state;
-            axios.delete('http://localhost:8080/dictionary', query)
+        let { query, favorites, werdData } = this.state;
+            axios.delete('http://localhost:8080/dictionary/word')
                 .then( () => {
-                    
+                    axios.get('http://localhost:8080/dictionary')
+                    .then( result => {
+                        this.setState({ werdData: result.data})
+                        res.send('Word removed with function!')
+                    })
                 })
                 .catch( err => { console.log('item removed!')})
             }
 
-    toggleLike(rating){ // Clicking like will set rating to 1, clicking dislike will set rating to -1
-        axios.put('http://localhost:8080/dictionary', rating)
+    toggleLike(userRating){ // Clicking like will set rating to 1, clicking dislike will set rating to -1
+        let { rating, werdData } = this.state;
+        const options = {
+            rating: rating
+        }
+        axios.put('http://localhost:8080/dictionary/rating', options)
             .then(() => {
                 axios.get('http://localhost:8080/dictionary')
-                    .then((result) => {
-                        if(rating === 1){
-                            this.setState({ werdData: result.data, rating: 1 })
-                        } else if(rating === -1){
-                            this.setState({ werdData: result.data, rating: -1 })
-                        } else {
-                            this.setState({ werdData: result.data })
-                        }
+                .then( result => {
+                    this.setState({
+                    rating: rating,
+                    werdData: result.data
+                           })
+                        })
                     })
-                })
-            }
+                }
 
     render(){
        let { favorites, query } = this.state;
@@ -132,8 +136,8 @@ export default class Layout extends React.Component {
                    <h4>Enter a word below:</h4>
                    <div><Search searchUrban={this.searchUrban} searchWerd={this.searchWerd} /></div>
                    <br></br>
-                   <div><QueryList entry={query} favoriteAWord={this.favoriteAWord}/></div>
-                   <div><FaveList faves={favorites} toggleLike={this.toggleLike}/></div>
+                   <div><QueryList entry={query} favoriteAWord={this.favoriteAWord} toggleLike={this.toggleLike}/></div>
+                   <div><FaveList faves={favorites}/></div>
                    {/* <div><FaveListEntry entry={query}/></div> */}
                </div>
            )
@@ -147,7 +151,7 @@ export default class Layout extends React.Component {
                 <h4>Enter a word below:</h4>
                 <div><Search searchUrban={this.searchUrban} searchWerd={this.searchWerd} /></div>
                 <br></br>
-                <div><QueryList entry={query} favoriteAWord={this.favoriteAWord}/></div>
+                <div><QueryList entry={query} favoriteAWord={this.favoriteAWord} toggleLike={this.toggleLike}/></div>
                 <div><FaveList faves={favorites}/></div>
                 <div><FaveListEntry entry={query} removeAWord={this.removeAWord}/></div>
             </div>
