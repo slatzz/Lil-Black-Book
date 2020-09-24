@@ -64,20 +64,21 @@ app.put('/dictionary/:rating', (req, res) => {
 //////////////////////////////////// DELETE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 app.delete('/dictionary', (req, res) => {
-    let { favedWord } = req.query
-    console.log('??', req.query)
-    // Queries.findAll({})
-    // .then( theWord => {
-        // console.log('result', result[0])
+    let favedWord = req.params
+    console.log('??', favedWord)
+    Queries.findAll({})
+    .then( result => {
+        console.log('result', result[0])
         Queries.destroy({
-        where: { word: favedWord }
+        where: { word: favedWord.word }
         })
-    // })
+    })
     .then( () => {
         res.send(`${ favedWord } deleted!`)
     })
     .catch( err => { console.log('Could not remove')})
-})
+    })
+
 
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// PORT //////////////////////////////////////////

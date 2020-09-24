@@ -1,1 +1,1 @@
-DELETE http://localhost:8080/dictionary/word
+GET http://localhost:8080/dictionary/

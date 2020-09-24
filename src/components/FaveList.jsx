@@ -1,7 +1,7 @@
 import React from 'react'
 import FaveListEntry from './FaveListEntry'
 
-const Favorites = (props) => (
+const FaveList = (props) => (
    <div>
     <div className='favorited-words'></div>
       <h3>My Word Bank</h3>
@@ -11,4 +11,4 @@ const Favorites = (props) => (
       <br></br>
   </div>
 )
-export default Favorites;
+export default FaveList;
