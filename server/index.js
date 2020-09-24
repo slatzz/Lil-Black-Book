@@ -14,7 +14,7 @@ const DIR = path.join(__dirname, '../build');
 const HTML_FILE = path.join(DIR, 'index.html');
 app.use(express.static(DIR));
 const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+app.use(express.json());
 // app.use(bodyParser.urlencoded({extended:true}));
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -39,7 +39,8 @@ app.get('/dictionary', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////
 app.post('/dictionary', (req, res) => {
     const { word } = req.body;
-    Queries.create( { word })
+    // console.log('post', word);
+    Queries.create( { word } )
         .then(word => {
             console.log("Word added to DB!")
             res.status(201).send(word)
@@ -52,36 +53,58 @@ app.post('/dictionary', (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// UPDATE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-app.put('/dictionary', (req, res) => {
-    let { vote } = req.body;
-    Queries.update({ rating: vote},)
-    .then(query => {
-      if(query){
-        query.update(rating)
-          .then( () => {
-            res.sendStatus(200)
-          })
-        }
-    })
-    .catch( err => {
-        res.status(500).send(err)
-    })
-  })
+// app.put('/dictionary', (req, res) => {
+//     // console.log('Hello')
+//     let { word } = req.body;
+//     // console.log('put', word)
+//     Queries.update({ rating: 1})
+//     .then(query => {
+//       if(query){
+//         query.update(rating)
+//           .then( () => {
+//             res.sendStatus(200)
+//           })
+//         }
+//     })
+//     .catch( err => {
+//         res.status(500).send(err)
+//     })
+//   })
+
+app.put('/dictionary/:rating', (req, res) => {
+    let { rating } = req.body
+        // console.log('~~~>', result[0])
+        Queries.update({ rating: rating }, { where: { rating: null }})
+            .then( () => { res.send('Rating changed!')})
+            .catch( err => { console.log('You have already rated this word, chillax bruhhh')})
+ })
+
+// app.put('/dictionary', (req, res) => {
+//     let { rating } = req.body
+//     Queries.update({ definition: 'UPDATE' })
+//     .then(result => {
+//         console.log('*****', result[0])
+//     })
+//     .catch( err => { console.log('You have already rated this word, chillax bruhhh')})
+    
+//         })
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// DELETE ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
-app.delete('/dictionary', (req, res) => {
-    const { id } = req.params;
-    Queries.findById(id)
-        .then(query => {
-            if(query){
-                query.destroy()
-                    .then( () => {
-                        res.sendStatus(200)
-                    })
-                    .catch(err => res.status(500))
-            }
+app.delete('/dictionary/:word', (req, res) => {
+    let { word } = req.body
+    // console.log('??', req.query)
+    // Queries.findAll({})
+    // .then( theWord => {
+        // console.log('result', result[0])
+        Queries.destroy({
+        where: { word: {word}}
         })
+    // })
+    .then( () => {
+        res.send(`${{word}} deleted!`)
+    })
+    .catch( err => { console.log('Could not remove')})
 })
 
 ////////////////////////////////////////////////////////////////////////////////////

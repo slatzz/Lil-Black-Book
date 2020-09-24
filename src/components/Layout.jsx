@@ -1,12 +1,9 @@
 import React from 'react';
 import Search from './Search'
-// import Favorites from './Favorites'
 import axios from 'axios';
 import FaveList from './FaveList';
 import FaveListEntry from './FaveListEntry'
 import QueryList from './QueryList'
-// import axios from 'axios';
-
 
 export default class Layout extends React.Component {
     constructor(props){
@@ -16,13 +13,15 @@ export default class Layout extends React.Component {
             werd: '', // The word input
             query: {}, // The searched word resp obj
             favorites: [], // My favorited words
-            werdData: [] // Collected word data
+            werdData: [], // Collected word data
+            rating: 0
         }
         // Bind functions to app
         this.searchUrban = this.searchUrban.bind(this);
         this.searchWerd = this.searchWerd.bind(this);
         this.favoriteAWord = this.favoriteAWord.bind(this);
         this.toggleLike = this.toggleLike.bind(this);
+        this.removeAWord = this.removeAWord.bind(this);
         // this.onSubmit = this.onSubmit.bind(this)
     }
 
@@ -95,16 +94,28 @@ export default class Layout extends React.Component {
             .catch( err => { console.log('something went wrong', err)})
         }
 
-    toggleLike(likesCount, vote){ // likesCt how many ppl have up or downvoted, vote is incrementer of either 1 or -1
-        const options = {
-            thumbs: likesCount, 
-            increment: vote
-        }
-        axios.put('http://localhost:8080/dictionary', options)
+    removeAWord(){
+            event.preventDefault();
+            let { query, favorites, werdData } = this.state;
+            axios.delete('http://localhost:8080/dictionary', query)
+                .then( () => {
+                    
+                })
+                .catch( err => { console.log('item removed!')})
+            }
+
+    toggleLike(rating){ // Clicking like will set rating to 1, clicking dislike will set rating to -1
+        axios.put('http://localhost:8080/dictionary', rating)
             .then(() => {
                 axios.get('http://localhost:8080/dictionary')
                     .then((result) => {
-                        this.setState({ werdData: result.data })
+                        if(rating === 1){
+                            this.setState({ werdData: result.data, rating: 1 })
+                        } else if(rating === -1){
+                            this.setState({ werdData: result.data, rating: -1 })
+                        } else {
+                            this.setState({ werdData: result.data })
+                        }
                     })
                 })
             }
@@ -138,7 +149,7 @@ export default class Layout extends React.Component {
                 <br></br>
                 <div><QueryList entry={query} favoriteAWord={this.favoriteAWord}/></div>
                 <div><FaveList faves={favorites}/></div>
-                <div><FaveListEntry entry={query} toggleLike={this.toggleLike}/></div>
+                <div><FaveListEntry entry={query} removeAWord={this.removeAWord}/></div>
             </div>
         )
        } 
